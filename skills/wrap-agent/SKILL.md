@@ -13,7 +13,7 @@ metadata:
 
 ## Step 1 — Scan the project
 
-Read all `.py` files in the target directory. Look at imports to detect the framework:
+Read all `.py` files in the target directory. Look at imports to detect the framework AND scan for environment variable usage:
 
 | Import pattern | Framework |
 |---|---|
@@ -121,9 +121,29 @@ CMD ["python", "agent.py"]
 If `bedrock-agentcore` is not in the existing requirements.txt, append it.
 If no requirements.txt exists, create one with `bedrock-agentcore` plus detected dependencies.
 
-## Step 6 — Report
+## Step 6 — Detect environment variables
 
-Output:
-- Framework detected
-- Files generated (agent.py, Dockerfile, requirements.txt changes)
-- The `lad deploy` command to run next
+Scan all `.py` files for `os.environ`, `os.getenv`, `environ.get`, `environ[`. Also check for `.env`, `.env.example`, and config files.
+
+For each env var found:
+- Note the file and line number
+- Classify as **required** (no default) or **optional** (has a default value)
+- Skip internal/non-secret ones like `PORT`, `HOME`, `PATH`, `PWD`
+
+## Step 7 — Report
+
+Output MUST include ALL of the following:
+
+1. **Framework detected** — LangGraph / CrewAI / Strands / Generic
+2. **Entry point** — the module path and object (e.g., `react_agent.graph:graph`)
+3. **Files generated** — agent.py, Dockerfile, requirements.txt changes
+4. **Environment variables**:
+   - List each required env var with file:line
+   - List each optional env var with file:line and default value
+5. **Deploy command** — the exact `lad deploy` command with all required `-e` flags as placeholders:
+
+```
+lad deploy . --name <agent_name> \
+  -e OPENAI_API_KEY=<your-key> \
+  -e TAVILY_API_KEY=<your-key>
+```
