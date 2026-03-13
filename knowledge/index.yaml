@@ -1,0 +1,3 @@
+documents:
+  - path: agentcore-contract.md
+    always_load: true

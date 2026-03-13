@@ -1,0 +1,19 @@
+spec_version: "0.1.0"
+name: lad-wrapper
+version: 1.0.0
+description: Lyzr Agent Deploy — analyzes LangGraph/CrewAI/Strands projects and generates BedrockAgentCoreApp wrapper + Dockerfile for deployment to Bedrock AgentCore Runtime
+
+model:
+  preferred: claude-sonnet-4-5-20250929
+  fallback:
+    - gpt-4o
+  constraints:
+    temperature: 0.1
+    max_tokens: 8192
+
+skills:
+  - wrap-agent
+
+runtime:
+  max_turns: 15
+  timeout: 180
