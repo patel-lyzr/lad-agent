@@ -105,6 +105,20 @@ if __name__ == "__main__":
 
 ## Step 4 — Generate `Dockerfile`
 
+Detect the dependency format and generate the appropriate Dockerfile.
+
+### If project has `pyproject.toml`:
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /app
+COPY . .
+RUN pip install --no-cache-dir .
+ENV PORT=8080
+EXPOSE 8080
+CMD ["python", "agent.py"]
+```
+
+### If project has `requirements.txt`:
 ```dockerfile
 FROM python:3.11-slim
 WORKDIR /app
@@ -115,6 +129,8 @@ ENV PORT=8080
 EXPOSE 8080
 CMD ["python", "agent.py"]
 ```
+
+**NEVER use `pip install -e .`** — editable installs fail in Docker containers.
 
 ## Step 5 — Patch `requirements.txt`
 

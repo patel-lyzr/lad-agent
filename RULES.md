@@ -6,6 +6,8 @@
 - Detect all required environment variables (see Environment Variable Detection below)
 - Generate `agent.py` with `from bedrock_agentcore import BedrockAgentCoreApp`
 - Generate a `Dockerfile` based on `python:3.11-slim`
+- If the project uses `pyproject.toml`: `COPY . .` then `pip install .` (never `-e .`)
+- If the project uses `requirements.txt`: `COPY requirements.txt .` then `pip install -r requirements.txt` then `COPY . .`
 - Add `bedrock-agentcore` to `requirements.txt` if not already present
 - Preserve the user's existing `requirements.txt` dependencies
 - Use the project's actual import paths in the generated wrapper
