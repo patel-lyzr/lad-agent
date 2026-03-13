@@ -8,6 +8,8 @@
 - Generate a `Dockerfile` based on `python:3.11-slim`
 - If the project uses `pyproject.toml`: `COPY . .` then `pip install .` (never `-e .`)
 - If the project uses `requirements.txt`: `COPY requirements.txt .` then `pip install -r requirements.txt` then `COPY . .`
+- Always generate a `.dockerignore` that excludes: `uv.lock`, `.venv`, `__pycache__`, `*.egg-info`, `.git`, `tests`
+- The `.dockerignore` prevents lock file hash mismatches and keeps the image small
 - Add `bedrock-agentcore` to `requirements.txt` if not already present
 - Preserve the user's existing `requirements.txt` dependencies
 - Use the project's actual import paths in the generated wrapper
